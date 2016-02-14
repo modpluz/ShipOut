@@ -159,7 +159,7 @@ class ShipmentController extends AppController
                 $this->Shipment->save($shipment);
 
                 $this->Flash->success('Shipment successfully created');
-                $this->redirect(['_name' => 'Shipment::Index']);
+                $this->redirect('/');
             } catch (\Exception $e) {
                 die(var_dump($e->getMessage()));
             }

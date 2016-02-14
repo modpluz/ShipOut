@@ -9,7 +9,7 @@ use Cake\Routing\Router;
     <title>
         ShipOut!
     </title>
-    <?= $this->Html->meta('icon') ?>
+<!--    --><?//= $this->Html->meta('icon') ?>
 
     <?= $this->Html->css('bootstrap.min.css') ?>
     <?=$this->Html->script('jquery.js')?>
@@ -31,8 +31,8 @@ use Cake\Routing\Router;
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
                 <ul class="nav navbar-nav">
-                    <li class="<?php if($this->request->here == Router::url(['_name' => 'Shipment::Index'])){ echo 'active';}?>?>">
-                        <a href="<?=Router::url(['_name' => 'Shipment::Index'])?>">Shipments</a>
+                    <li class="<?php if($this->request->here == '/'){ echo 'active';}?>?>">
+                        <a href="<?=Router::url('/')?>">Shipments</a>
                     </li>
                     <li class="<?php if($this->request->here == Router::url(['_name' => 'Shipment::Create'])){ echo 'active';}?>?>">
                         <a href="<?=Router::url(['_name' => 'Shipment::Create'])?>">Create a Shipment</a>

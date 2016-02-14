@@ -49,10 +49,10 @@ Router::scope('/', function ($routes) {
      */
     $routes->connect('/', ['controller' => 'Shipment', 'action' => 'index']);
 
-    /**
-     * ...and connect the rest of 'Pages' controller's URLs.
-     */
-    $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
+
+    $routes->connect('login', ['controller' => 'Auth', 'action' => 'login'], ['_name' => 'login']);
+    $routes->connect('users/login', ['controller' => 'Auth', 'action' => 'login'], ['_name' => 'login']);
+    $routes->connect('logout', ['controller' => 'Auth', 'action' => 'logout'], ['_name' => 'logout']);
 
     $routes->connect(
         '/rates/:shipment_id',
@@ -70,6 +70,12 @@ Router::scope('/', function ($routes) {
         '/shipment/create',
         ['controller' => 'Shipment', 'action' => 'create'],
         ['_name' => 'Shipment::Create']
+    );
+
+    $routes->connect(
+        '/shipment/track',
+        ['controller' => 'Shipment', 'action' => 'track'],
+        ['_name' => 'Shipment::TrackIndex']
     );
 
     $routes->connect(

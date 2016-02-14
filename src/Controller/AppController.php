@@ -43,6 +43,29 @@ class AppController extends Controller
 
         $this->loadComponent('RequestHandler');
         $this->loadComponent('Flash');
+        $this->loadComponent(
+            'Auth',
+            [
+                'authenticate' => [
+                    'Form' => [
+                        'fields' => ['username' => 'email', 'password' => 'password']
+                    ]
+                ],
+                'authError' => 'Please login to continue.',
+                'unauthorizedRedirect' => 'login',
+                'loginRedirect' =>
+                    [
+                        'controller' => 'Auth',
+                        'action' => 'dashboard'
+                    ],
+                'logoutRedirect' =>
+                    [
+                        'controller' => 'Auth',
+                        'action' => 'login'
+                    ]
+            ]
+        );
+
     }
 
     /**
@@ -53,6 +76,8 @@ class AppController extends Controller
      */
     public function beforeRender(Event $event)
     {
+        $this->set('authUser', $this->Auth->user());
+
         if (!array_key_exists('_serialize', $this->viewVars) &&
             in_array($this->response->type(), ['application/json', 'application/xml'])
         ) {

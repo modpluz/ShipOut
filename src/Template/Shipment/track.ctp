@@ -7,7 +7,12 @@ use Cake\Routing\Router;
         </div>
         <div class="panel-body">
             <div class="col col-md-12">
-                <strong>Tracking #:</strong> <?=$shipment->tracking_number?>
+                <?=$this->Form->create(null, ['class' => 'form'])?>
+                <div class="form-group col-md-8">
+                    <strong>Tracking #:</strong> <input type="text" class="form-control" name="tracking_number" value="<?=!empty($tracking_number) ? $tracking_number : ''?>">
+                    <button type="submit" class="btn btn-primary">Track</button>
+                </div>
+                <?=$this->Form->end()?>
             </div>
             <?php if (!empty($shipment_data['sender'])) { ?>
                 <div class="col col-md-5">
@@ -41,13 +46,48 @@ use Cake\Routing\Router;
                     </div>
                 </div>
             <?php } ?>
-
+            <?php if(!empty($tracking_info) && !empty($tracking_info['tracking_status'])){?>
             <div class="col col-md-12">
                 <strong>Tracking Details:</strong>
-                <div class="col col-md-offset-1">
+                <div class="col col-md-12">
+                    <table class="table table-bordered" width="100%" cellspacing="0" cellpadding="0">
+                        <thead>
+                            <tr>
+                                <td height="30" width="15%">Date</td>
+                                <td width="10%">Status</td>
+                                <td>Comments</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><?=$tracking_info['tracking_status']['status_date']?></td>
+                                <td><span class="label label-info"><?=$tracking_info['tracking_status']['status']?></span></td>
+                                <td><?=$tracking_info['tracking_status']['status_details']?></td>
+                            </tr>
+                            <?php
+                            if (!empty($tracking_info['tracking_history'])) {
+                                foreach ($tracking_info['tracking_history'] as $info) {
+                            ?>
+                                    <tr>
+                                        <td><?=$info['status_date']?></td>
+                                        <td><span class="label label-info"><?=$info['status']?></span></td>
+                                        <td><?=$info['status_details']?></td>
+                                    </tr>
 
+                                    <?php
+                                }
+                            }
+                            ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
+            <?php } elseif (!empty($tracking_info)) { ?>
+                <div class="clearfix">&nbsp;</div>
+                <div class="alert alert-danger">
+                    We could not find any information for the specified tracking number.
+                </div>
+            <?php } ?>
 
         </div>
     </div>

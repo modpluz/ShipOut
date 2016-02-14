@@ -1,17 +1,5 @@
 <?php
-/**
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @since         0.10.0
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
+use Cake\Routing\Router;
 ?>
 <!DOCTYPE html>
 <html>
@@ -33,8 +21,28 @@
 </head>
 <body>
     <section class="header text-center">
-        <h2>ShipUp!</h2>
+        <h2>ShipOut!</h2>
     </section>
+    <nav class="navbar navbar-inverse col-md-8 col-md-offset-2">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">ShipOut!</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
+                <ul class="nav navbar-nav">
+                    <li class="<?php if($this->request->here == Router::url(['_name' => 'Shipment::Index'])){ echo 'active';}?>?>">
+                        <a href="<?=Router::url(['_name' => 'Shipment::Index'])?>">Shipments</a>
+                    </li>
+                    <li class="<?php if($this->request->here == Router::url(['_name' => 'Shipment::Create'])){ echo 'active';}?>?>">
+                        <a href="<?=Router::url(['_name' => 'Shipment::Create'])?>">Create a Shipment</a>
+                    </li>
+                    <li class="<?php if($this->request->here == Router::url(['_name' => 'Shipment::TrackIndex'])){ echo 'active';}?>?>">
+                        <a href="<?=Router::url(['_name' => 'Shipment::TrackIndex'])?>">Track Shipment</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <section class="container clearfix">
         <?= $this->Flash->render() ?>
         <div class="col col-md-10">

@@ -5,7 +5,7 @@
         </div>
         <div class="panel-body">
             <?=$this->Form->create(null, ['class' => 'form'])?>
-            <div class="form-group">
+           <!-- <div class="form-group">
                 <label for="carrier">Preferred Carrier</label>
                 <select name="carrier" class="form-control col-md-4">
                     <option value="dhl">DHL Express</option>
@@ -14,7 +14,20 @@
                     <option value="ups">UPS</option>
                 </select>
             </div>
-            <div class="col col-md-6">
+            -->
+            <!--<div class="well well-sm">
+                Provide a Tracking number below and we will automatically shipping info.
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" name="tracking_number" placeholder="Tracking Number">
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-success" name="crete_shippment_from_tn">Create Shipment</button>
+            </div>
+
+            <h3 class="text-center">OR</h3>
+-->            <div class="col col-md-6">
                 <strong>Sender:</strong>
                 <div class="well well-sm">
                     <div class="form-group">
@@ -80,7 +93,7 @@
                 </div>
             </div>
             <div class="text-center">
-                <button type="submit" class="btn btn-success">Get Rates</button>
+                <button type="submit" class="btn btn-success" name="crete_shipping">Get Rates</button>
             </div>
             <?=$this->Form->end()?>
         </div>

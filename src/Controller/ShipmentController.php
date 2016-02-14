@@ -4,6 +4,8 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Core\Configure;
 use Cake\Network\Exception\BadRequestException;
+use GuzzleHttp\Exception\BadResponseException;
+
 /**
  * Shipment Controller
  *
@@ -36,6 +38,23 @@ class ShipmentController extends AppController
             $data = $this->request->data;
 
             \Shippo::setApiKey(Configure::read('Shippo.private_key'));
+
+/*
+            if (!empty($data['tracking_number'])) {
+                try {
+                    $client = new \GuzzleHttp\Client(['base_url' => Configure::read('Shippo.tracking_url')]);
+
+                    $resp = $client->get('/v1/tracks/usps/' . $data['tracking_number'] . '/');
+                    if ($resp->getStatusCode() == 200) {
+                        $tracking_info = $resp->json();
+                        die(var_dump($tracking_info));
+                    } else {
+                        throw new \Exception('We could not get tracking info for the supplied tracking number.');
+                    }
+                } catch (\Exception $e) {
+                    die(var_dump($e->getMessage()));
+                }
+            }*/
 
             $shipment = [
                 'from' => [
@@ -94,20 +113,22 @@ class ShipmentController extends AppController
             }
 
             $this->set('shipment', $shipment);
-
         }
     }
 
     /**
      * Rates for a Shipment
+     *
      * @param $shipment_id
      */
-    public function rates($shipment_id) {
+    public function rates($shipment_id)
+    {
         if (empty($shipment_id)) {
             throw new BadRequestException('Shipment ID is required to retrieve rates.');
         }
 
         \Shippo::setApiKey(Configure::read('Shippo.private_key'));
+
         $shipment_rates = \Shippo_Shipment::get_shipping_rates(['id' => $shipment_id]);
         if (empty($shipment_rates['results'])) {
             $this->Flash->error('We could not find applicable rates for the specified shipment.');
@@ -157,49 +178,63 @@ class ShipmentController extends AppController
     public function track($tracking_number = null)
     {
         try {
-            $shipment = $this->Shipment->find()->where(['tracking_number' => $tracking_number])->firstOrFail();
-
-            \Shippo::setApiKey(Configure::read('Shippo.private_key'));
-
-            $shipment_data = \Shippo_Shipment::retrieve($shipment->shipment_id);
-            if (!empty($shipment_data['address_from'])) {
-                $shipment_data['sender'] = \Shippo_Address::retrieve($shipment_data['address_from']);
-            }
-            if (!empty($shipment_data['address_to'])) {
-                $shipment_data['recipient'] = \Shippo_Address::retrieve($shipment_data['address_to']);
-            }
-            if (!empty($shipment_data['parcel'])) {
-                $shipment_data['parcel'] = \Shippo_Parcel::retrieve($shipment_data['parcel']);
+            if ($this->request->is(['post', 'put'])) {
+                $tracking_number = $this->request->data('tracking_number');
             }
 
-            $shipment_data['rate'] = \Shippo_Rate::retrieve($shipment->rate);
+            $provider = 'usps';
 
-//            debug($shipment_data['rate']);
-//            exit;
+            if (!empty($tracking_number)) {
+                $shipment = $this->Shipment->find()->where(['tracking_number' => $tracking_number])->first();
 
-            //tracking info
-//            $client = new \GuzzleHttp\Client(['base_url' => Configure::read('Shippo.tracking_url')]);
-//            $resp = $client->get('/v1/tracks/' . strtolower($shipment_data['rate']['provider']) . '/' . $shipment->tracking_number . '/');
-//            if ($resp->getStatusCode() == 200) {
-////                return $resp->json();
-//                debug($resp->json());
-//            }
-//            exit;
-//            $tracking = \Shippo_Manifest::
+                \Shippo::setApiKey(Configure::read('Shippo.private_key'));
+
+                if (!empty($shipment)) {
+                    $shipment_data = \Shippo_Shipment::retrieve($shipment->shipment_id);
+                    if (!empty($shipment_data['address_from'])) {
+                        $shipment_data['sender'] = \Shippo_Address::retrieve($shipment_data['address_from']);
+                    }
+                    if (!empty($shipment_data['address_to'])) {
+                        $shipment_data['recipient'] = \Shippo_Address::retrieve($shipment_data['address_to']);
+                    }
+                    if (!empty($shipment_data['parcel'])) {
+                        $shipment_data['parcel'] = \Shippo_Parcel::retrieve($shipment_data['parcel']);
+                    }
+
+                    $shipment_data['rate'] = \Shippo_Rate::retrieve($shipment->rate);
+                    $provider = strtolower($shipment_data['rate']['provider']);
+                } else {
+                    if (Configure::check('TrackingNumbers.' . $tracking_number)) {
+                        $provider = Configure::read('TrackingNumbers.' . $tracking_number);
+                    }
+                }
+
+                $this->set('tracking_number', $tracking_number);
 
 
+                //tracking info
+                try {
+                    $client = new \GuzzleHttp\Client(['base_url' => Configure::read('Shippo.tracking_url')]);
 
+                    $resp = $client->get('/v1/tracks/' . $provider . '/' . $tracking_number . '/');
+                    if ($resp->getStatusCode() == 200) {
+                        $tracking_info = $resp->json();
 
-//            debug(var_dump($shipment_data));
-        } catch(\Exception $e) {
+                        $this->set('tracking_info',  $tracking_info);
+                    } else {
+                        throw new \Exception('We could not get tracking info for the supplied tracking number.');
+                    }
+                } catch (\Exception $e) {
+                    die(var_dump($e->getMessage()));
+                }
+            }
+        } catch (\Exception $e) {
             die(var_dump($e->getMessage()));
         }
-
 
         $this->set(compact('shipment', 'shipment_data'));
         $this->set('_serialize', ['shipment', 'shipment_data']);
     }
-
 
     /**
      * Delete method
@@ -217,6 +252,7 @@ class ShipmentController extends AppController
         } else {
             $this->Flash->error(__('The shipment could not be deleted. Please, try again.'));
         }
+
         return $this->redirect(['action' => 'index']);
     }
 }

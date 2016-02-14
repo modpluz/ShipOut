@@ -40,6 +40,9 @@ use Cake\Routing\Router;
                     <li class="<?php if($this->request->here == Router::url(['_name' => 'Shipment::TrackIndex'])){ echo 'active';}?>?>">
                         <a href="<?=Router::url(['_name' => 'Shipment::TrackIndex'])?>">Track Shipment</a>
                     </li>
+                    <li>
+                        <a href="/logout">Logout</a>
+                    </li>
                 </ul>
             </div>
         </div>

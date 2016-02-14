@@ -47,4 +47,16 @@ class AuthController extends AppController
     }
 
 
+    /**
+     * Logout method
+     *
+     * @return void|\Cake\Network\Response.
+     */
+    public function logout()
+    {
+        $this->Flash->set('You have been successfully logged out', ['element' => 'success']);
+        return $this->redirect($this->Auth->logout());
+    }
+
+
 }

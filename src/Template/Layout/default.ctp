@@ -44,6 +44,7 @@ use Cake\Routing\Router;
             </div>
         </div>
     </nav>
+        <div class="clearfix">&nbsp;</div>
     <?php } ?>
     <section class="container clearfix">
         <?= $this->Flash->render() ?>

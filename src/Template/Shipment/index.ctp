@@ -15,21 +15,25 @@ use Cake\Routing\Router;
                 </thead>
                 <tbody>
             <?php
-            if (!empty($shipments) && $shipments->count()) {
-                foreach($shipments as $shipment) {
-            ?>
-                <tr>
-                    <td height="30">
-                        <a href="<?=Router::url(['_name' => 'Shipment::Track', 'tracking_number' => $shipment->tracking_number])?>"><?=$shipment->tracking_number?></a>
-                    </td>
-                    <td>
+            if (!empty($shipments['results'])) {
+                foreach($shipments['results'] as $shipment) {
+                    if ($shipment['object_status'] === 'SUCCESS') {
+                        ?>
+                        <tr>
+                            <td height="30">
+                                <a href="<?= Router::url(
+                                    ['_name' => 'Shipment::Track', 'tracking_number' => $shipment['tracking_number']]
+                                ) ?>"><?= $shipment['tracking_number'] ?></a>
+                            </td>
+                            <td>
                         <span class="label label-info">
-                            <?=$shipment->last_known_status?>
+                            <?= $shipment['tracking_status']['status'] ?>
                         </span>
-                    </td>
-                </tr>
+                            </td>
+                        </tr>
 
-            <?php
+                        <?php
+                    }
                 }
             } else { ?>
                 <tr>

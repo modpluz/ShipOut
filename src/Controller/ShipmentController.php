@@ -21,7 +21,11 @@ class ShipmentController extends AppController
      */
     public function index()
     {
-        $shipments = $this->paginate($this->Shipment);
+        \Shippo::setApiKey(Configure::read('Shippo.private_key'));
+        $shipments = \Shippo_Transaction::all();
+//        die(var_dump($shipments));
+//
+//        $shipments = $this->paginate($this->Shipment);
 
         $this->set(compact('shipments'));
         $this->set('_serialize', ['shipments']);
@@ -139,7 +143,7 @@ class ShipmentController extends AppController
 
             //create transaction
             try {
-                $this->loadModel('Shipment');
+//                $this->loadModel('Shipment');
                 $transaction = \Shippo_Transaction::create(
                     [
                         'rate' => $data["rate_id"],
@@ -148,15 +152,15 @@ class ShipmentController extends AppController
                     ]
                 );
 
-                $shipment_data = [
-                    'shipment_id' => $shipment_id,
-                    'rate' => $transaction['rate'],
-                    'last_known_status' => $transaction['tracking_status']['status'],
-                    'shippo_object_id' => $transaction['object_id'],
-                    'tracking_number' => $transaction['tracking_number'],
-                ];
-                $shipment = $this->Shipment->newEntity($shipment_data);
-                $this->Shipment->save($shipment);
+//                $shipment_data = [
+//                    'shipment_id' => $shipment_id,
+//                    'rate' => $transaction['rate'],
+//                    'last_known_status' => $transaction['tracking_status']['status'],
+//                    'shippo_object_id' => $transaction['object_id'],
+//                    'tracking_number' => $transaction['tracking_number'],
+//                ];
+//                $shipment = $this->Shipment->newEntity($shipment_data);
+//                $this->Shipment->save($shipment);
 
                 $this->Flash->success('Shipment successfully created');
                 $this->redirect('/');

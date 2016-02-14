@@ -23,6 +23,7 @@ use Cake\Routing\Router;
     <section class="header text-center">
         <h2>ShipOut!</h2>
     </section>
+    <?php if (!empty($authUser)){?>
     <nav class="navbar navbar-inverse col-md-8 col-md-offset-2">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -43,6 +44,7 @@ use Cake\Routing\Router;
             </div>
         </div>
     </nav>
+    <?php } ?>
     <section class="container clearfix">
         <?= $this->Flash->render() ?>
         <div class="col col-md-10">

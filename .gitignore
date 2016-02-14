@@ -1,0 +1,8 @@
+.vagrant
+.idea
+vendor
+!webroot/vendor
+logs
+tmp
+.DS_Store
+shipout.php

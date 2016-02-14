@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Psr\Log\LogLevel;
 
 /**
  * Webhooks Controller
@@ -18,6 +19,6 @@ class WebhooksController extends AppController
      */
     public function tracking()
     {
-        die(var_dump('here'));
+        $this->log(LogLevel::DEBUG, 'here');
     }
 }

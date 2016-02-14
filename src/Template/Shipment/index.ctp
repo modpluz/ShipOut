@@ -22,7 +22,11 @@ use Cake\Routing\Router;
                     <td height="30">
                         <a href="<?=Router::url(['_name' => 'Shipment::Track', 'tracking_number' => $shipment->tracking_number])?>"><?=$shipment->tracking_number?></a>
                     </td>
-                    <td><?=$shipment->last_known_status?></td>
+                    <td>
+                        <span class="label label-info">
+                            <?=$shipment->last_known_status?>
+                        </span>
+                    </td>
                 </tr>
 
             <?php

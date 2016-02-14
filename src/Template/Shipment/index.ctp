@@ -15,7 +15,7 @@ use Cake\Routing\Router;
                 </thead>
                 <tbody>
             <?php
-            if (!empty($shipments)) {
+            if (!empty($shipments) && $shipments->count()) {
                 foreach($shipments as $shipment) {
             ?>
                 <tr>

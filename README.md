@@ -8,9 +8,9 @@ DeveloperWeek 2016 Hackathon challenge project.
 ###Demo
 http://shipout.imerdemo.com
 
-Demo Email: shippo@imerlabs.com
+Email: shippo@imerlabs.com
 
-Demo Password: whocares
+Password: whocares
 
 ####Tracking Numbers
 You can create your own shipments and use the resulting tracking number, this however, times out when requesting shipment with the tracking number provided by the API.

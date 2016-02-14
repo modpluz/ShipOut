@@ -43,6 +43,23 @@ class ShipmentController extends AppController
 
             \Shippo::setApiKey(Configure::read('Shippo.private_key'));
 
+            if($data['save_default'] == 1) {
+                $this->loadModel('ShipmentDefault');
+
+                $data['user_id'] = $this->Auth->user('id');
+
+                //get existing info
+                if(!$default = $this->ShipmentDefault->find()->where(['user_id' => $data['user_id']])->first()) {
+                    $default_data = $this->ShipmentDefault->newEntity($data);
+                } else {
+                    $default_data = $this->ShipmentDefault->patchEntity($default, $data);
+                }
+
+                $this->ShipmentDefault->save($default_data);
+
+            }
+
+
 /*
             if (!empty($data['tracking_number'])) {
                 try {
@@ -238,6 +255,17 @@ class ShipmentController extends AppController
 
         $this->set(compact('shipment', 'shipment_data'));
         $this->set('_serialize', ['shipment', 'shipment_data']);
+    }
+
+    public function getDefault()
+    {
+        $this->loadModel('ShipmentDefault');
+
+        $data = $this->ShipmentDefault->find()->where(['user_id' => $this->Auth->user('id')])->first();
+        if (!empty($data)) {
+            echo json_encode($data);
+        }
+        exit;
     }
 
     /**

@@ -27,7 +27,13 @@
             </div>
 
             <h3 class="text-center">OR</h3>
--->            <div class="col col-md-6">
+
+-->         <div class="text-center">
+                <button type="button" class="btn btn-warning" id="btn_default">
+                    Use Saved Info
+                </button>
+            </div>
+            <div class="col col-md-6">
                 <strong>Sender:</strong>
                 <div class="well well-sm">
                     <div class="form-group">
@@ -93,9 +99,46 @@
                 </div>
             </div>
             <div class="text-center">
+                <input type="checkbox" value="1" name="save_default" id="save_default"> <label for="save_default">Save this information for future use.</label>
+                <div class="well well-sm">
+                    <strong>Note:</strong> Existing info will be overwritten if you choose to "Save".
+                </div>
+            </div>
+            <div class="text-center">
                 <button type="submit" class="btn btn-success" name="crete_shipping">Get Rates</button>
             </div>
             <?=$this->Form->end()?>
         </div>
     </div>
 </div>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function ()
+    {
+       $('#btn_default').on('click', function () {
+           $.get( "/shipment/get_default", function( data ) {
+               data = $.parseJSON(data);
+               if(data.id) {
+                   $('input[name="sender_name"]').val(data.sender_name);
+                   $('input[name="sender_company"]').val(data.sender_company);
+                   $('input[name="sender_address"]').val(data.sender_address);
+                   $('input[name="sender_city"]').val(data.sender_city);
+                   $('input[name="sender_state"]').val(data.sender_state);
+                   $('input[name="sender_country"]').val(data.sender_country);
+                   $('input[name="sender_postcode"]').val(data.sender_postcode);
+                   $('input[name="sender_phone"]').val(data.sender_phone);
+                   $('input[name="sender_email"]').val(data.sender_email);
+
+                   $('input[name="receiver_name"]').val(data.receiver_name);
+                   $('input[name="receiver_company"]').val(data.receiver_company);
+                   $('input[name="receiver_address"]').val(data.receiver_address);
+                   $('input[name="receiver_city"]').val(data.receiver_city);
+                   $('input[name="receiver_state"]').val(data.receiver_state);
+                   $('input[name="receiver_country"]').val(data.receiver_country);
+                   $('input[name="receiver_postcode"]').val(data.receiver_postcode);
+                   $('input[name="receiver_phone"]').val(data.receiver_phone);
+                   $('input[name="receiver_email"]').val(data.receiver_email);
+               }
+           });
+       }) ;
+    });
+</script>

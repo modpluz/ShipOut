@@ -9,7 +9,7 @@ use Cake\Routing\Router;
     <title>
         ShipOut!
     </title>
-<!--    --><?//= $this->Html->meta('icon') ?>
+    <?php //= $this->Html->meta('icon') ?>
 
     <?= $this->Html->css('bootstrap.min.css') ?>
     <?=$this->Html->script('jquery.js')?>

@@ -55,8 +55,8 @@ class AppController extends Controller
                 'unauthorizedRedirect' => 'login',
                 'loginRedirect' =>
                     [
-                        'controller' => 'Auth',
-                        'action' => 'dashboard'
+                        'controller' => 'Shipment',
+                        'action' => 'index'
                     ],
                 'logoutRedirect' =>
                     [

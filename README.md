@@ -10,7 +10,7 @@ http://shipout.imerdemo.com
 
 Email: shippo@imerlabs.com
 
-Password: whocares
+Password: #######
 
 ####Tracking Numbers
 You can create your own shipments and use the resulting tracking number, this however, times out when requesting shipment with the tracking number provided by the API.
